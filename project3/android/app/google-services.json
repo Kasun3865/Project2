@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "826037869600",
+    "project_id": "calm-mental-health-application",
+    "storage_bucket": "calm-mental-health-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826037869600:android:2659781565020aab37b045",
+        "android_client_info": {
+          "package_name": "com.example.project3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC__ds2-tXKiwBpUdRgMsipxJsfr7e20Fo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
