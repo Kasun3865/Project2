@@ -7,7 +7,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance; // Firebase Authentication instance
   final _formKey = GlobalKey<FormState>();
   String _email = '';
 
@@ -16,10 +16,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       _formKey.currentState!.save();
       try {
         await _auth.sendPasswordResetEmail(email: _email);
-        // Show success message
-        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Password reset email sent!')),
+        );
+        Navigator.pop(context); // Go back to the login screen
       } catch (e) {
         print(e);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to send reset email')),
+        );
       }
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'signup_screen.dart'; // You will create this next
-import 'loading_screen.dart'; // You will create this later
+import 'package:project3/screens/loading_screen.dart';
+import 'signup_screen.dart';
+import 'forgot_password_screen.dart'; // Import the Forgot Password screen
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -78,7 +79,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // Navigate to forgot password screen (optional)
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPasswordScreen()),
+                      );
                     },
                     child: Text(
                       'Forgot Password?',
