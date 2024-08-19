@@ -10,6 +10,7 @@ class EmergencyContactScreen extends StatefulWidget {
 class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
   final _formKey = GlobalKey<FormState>();
   final List<Map<String, String>> _contacts = [];
+  final List<String> _contactIds = []; // List to store the document IDs
 
   String _name = '';
   String _phoneNumber = '';
@@ -37,6 +38,10 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
                     'phoneNumber': doc['phoneNumber'] as String,
                   })
               .toList());
+
+          _contactIds.addAll(snapshot.docs
+              .map((doc) => doc.id)
+              .toList()); // Store document IDs
         });
       } catch (e) {
         print('Failed to fetch contacts: $e');
@@ -68,6 +73,7 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
               'name': _name,
               'phoneNumber': _phoneNumber,
             });
+            _contactIds.add(docRef.id); // Add the document ID to the list
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -82,6 +88,34 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
       }
 
       _formKey.currentState!.reset();
+    }
+  }
+
+  Future<void> _deleteContact(int index) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('contacts')
+            .doc(_contactIds[index])
+            .delete();
+
+        setState(() {
+          _contacts.removeAt(index);
+          _contactIds.removeAt(index);
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Contact deleted successfully')),
+        );
+      } catch (e) {
+        print('Failed to delete contact: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete contact')),
+        );
+      }
     }
   }
 
@@ -112,11 +146,22 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
                     leading: Icon(Icons.person, color: Colors.green[700]),
                     title: Text(_contacts[index]['name'] ?? ''),
                     subtitle: Text(_contacts[index]['phoneNumber'] ?? ''),
-                    trailing: IconButton(
-                      icon: Icon(Icons.phone, color: Colors.green[700]),
-                      onPressed: () {
-                        // Implement call functionality here
-                      },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.phone, color: Colors.green[700]),
+                          onPressed: () {
+                            // Implement call functionality here
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red[700]),
+                          onPressed: () {
+                            _deleteContact(index);
+                          },
+                        ),
+                      ],
                     ),
                   );
                 },
