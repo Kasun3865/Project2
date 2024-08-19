@@ -11,7 +11,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final User? user = FirebaseAuth.instance.currentUser;
 
-  Future<List<Map<String, dynamic>>> _fetchNotifications() async {
+  Future<List<DocumentSnapshot>> _fetchNotifications() async {
     if (user != null) {
       QuerySnapshot querySnapshot = await _firestore
           .collection('users')
@@ -19,11 +19,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           .collection('notifications')
           .orderBy('timestamp', descending: true)
           .get();
-      return querySnapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
+      return querySnapshot.docs;
     }
     return [];
+  }
+
+  Future<void> _markAsRead(List<DocumentSnapshot> notifications) async {
+    if (user != null) {
+      for (var doc in notifications) {
+        if (doc['read'] == false) {
+          await doc.reference.update({'read': true});
+        }
+      }
+    }
   }
 
   @override
@@ -41,7 +49,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         title:
             Text('Notifications', style: TextStyle(color: Colors.green[700])),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
+      body: FutureBuilder<List<DocumentSnapshot>>(
         future: _fetchNotifications(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -51,7 +59,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           } else if (snapshot.hasData && snapshot.data!.isEmpty) {
             return Center(child: Text('No notifications available.'));
           } else {
-            List<Map<String, dynamic>> notifications = snapshot.data ?? [];
+            List<DocumentSnapshot> notifications = snapshot.data ?? [];
+
+            // Mark all unread notifications as read
+            _markAsRead(notifications);
+
             return ListView.builder(
               padding: const EdgeInsets.all(16.0),
               itemCount: notifications.length,

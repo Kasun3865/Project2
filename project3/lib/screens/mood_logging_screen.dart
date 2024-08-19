@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project3/screens/notifications_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'my_account_screen.dart'; // Import the My Account screen
 
 class MoodLoggingScreen extends StatefulWidget {
@@ -8,6 +10,30 @@ class MoodLoggingScreen extends StatefulWidget {
 }
 
 class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
+  int _notificationCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotificationCount();
+  }
+
+  Future<void> _fetchNotificationCount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('notifications')
+          .where('read', isEqualTo: false)
+          .get();
+
+      setState(() {
+        _notificationCount = snapshot.docs.length;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,14 +51,43 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           },
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.green[700]),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationsScreen()),
-              );
-            },
+          Stack(
+            children: [
+              IconButton(
+                icon: Icon(Icons.notifications, color: Colors.green[700]),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationsScreen()),
+                  );
+                },
+              ),
+              if (_notificationCount > 0)
+                Positioned(
+                  right: 11,
+                  top: 11,
+                  child: Container(
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '$_notificationCount',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
           ),
           IconButton(
             icon: Icon(Icons.menu, color: Colors.green[700]),
