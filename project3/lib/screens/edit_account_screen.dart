@@ -56,6 +56,18 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           'email': _email,
           'phone_number': _phoneNumber,
         });
+
+        // Store a notification in Firestore
+        await _firestore
+            .collection('users')
+            .doc(user?.uid)
+            .collection('notifications')
+            .add({
+          'title': 'Account Information Updated',
+          'message': 'Your account details have been successfully updated.',
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Account details updated successfully!')),
         );

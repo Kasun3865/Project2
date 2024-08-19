@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project3/screens/notifications_screen.dart';
 import 'my_account_screen.dart'; // Import the My Account screen
 
 class MoodLoggingScreen extends StatefulWidget {
@@ -26,7 +27,12 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.green[700]),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationsScreen()),
+              );
+            },
           ),
           IconButton(
             icon: Icon(Icons.menu, color: Colors.green[700]),
@@ -151,7 +157,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             label: 'Emergency Contacts',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.feedback),
+            icon: Icon(Icons.star), // Changed from feedback icon to star icon
             label: 'Feedback',
           ),
         ],
