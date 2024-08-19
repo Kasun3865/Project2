@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project3/screens/notifications_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'my_account_screen.dart'; // Import the My Account screen
+import 'feedback_screen.dart'; // Import the FeedbackScreen
+import 'emergency_contact_screen.dart'; // Import the EmergencyContactScreen
 
 class MoodLoggingScreen extends StatefulWidget {
   @override
@@ -21,7 +23,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
   Future<void> _fetchNotificationCount() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final snapshot = await FirebaseFirestore.instance
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .collection('notifications')
@@ -198,6 +200,19 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.green[700],
         unselectedItemColor: Colors.green[300],
+        onTap: (int index) {
+          if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EmergencyContactScreen()),
+            );
+          } else if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FeedbackScreen()),
+            );
+          }
+        },
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -212,7 +227,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             label: 'Emergency Contacts',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star), // Changed from feedback icon to star icon
+            icon: Icon(Icons.star), // Feedback icon
             label: 'Feedback',
           ),
         ],
