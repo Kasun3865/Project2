@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:project3/screens/login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -9,7 +10,9 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance; // Initialize Firestore
   final _formKey = GlobalKey<FormState>();
+  String _username = '';
   String _email = '';
   String _password = '';
   String _confirmPassword = '';
@@ -20,21 +23,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _formKey.currentState!.save();
       try {
         if (_password == _confirmPassword) {
+          // Create a new user with Firebase Authentication
           UserCredential userCredential =
               await _auth.createUserWithEmailAndPassword(
             email: _email,
             password: _password,
           );
+
+          // Save the additional user information in Firestore
           if (userCredential.user != null) {
+            await _firestore
+                .collection('users')
+                .doc(userCredential.user!.uid)
+                .set({
+              'username': _username,
+              'email': _email,
+              'phone_number': _phoneNumber,
+              'created_at': FieldValue.serverTimestamp(),
+            });
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text('You have successfully created an account!')),
+            );
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => LoginScreen()),
             );
           }
         } else {
-          print('Passwords do not match');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Passwords do not match.')),
+          );
         }
       } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Account creation failed. Please try again.')),
+        );
         print(e);
       }
     }
@@ -53,12 +78,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'User name'),
+                  decoration: InputDecoration(labelText: 'Username'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your username';
                     }
                     return null;
+                  },
+                  onSaved: (value) {
+                    _username = value!;
                   },
                 ),
                 SizedBox(height: 16),
@@ -68,6 +96,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your email';
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'Please enter a valid email';
                     }
                     return null;
                   },

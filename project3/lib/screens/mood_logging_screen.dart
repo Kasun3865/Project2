@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'my_account_screen.dart'; // Import the My Account screen
 
 class MoodLoggingScreen extends StatefulWidget {
   @override
@@ -6,9 +7,6 @@ class MoodLoggingScreen extends StatefulWidget {
 }
 
 class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
-  String _selectedMood = '';
-  final TextEditingController _moodController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +16,12 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.person, color: Colors.green[700]),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyAccountScreen()),
+            );
+          },
         ),
         actions: [
           IconButton(
@@ -117,7 +120,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
-                    controller: _moodController,
                     maxLines: 4,
                     decoration: InputDecoration(
                       hintText: 'Write how you feel today...',

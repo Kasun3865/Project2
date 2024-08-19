@@ -30,8 +30,23 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         }
       } catch (e) {
-        print(e);
+        String errorMessage;
+        if (e.code == 'user-not-found') {
+          errorMessage = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Incorrect password provided.';
+        } else {
+          errorMessage =
+              'Login failed. Please check your details and try again.';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter both email and password.')),
+      );
     }
   }
 
@@ -48,11 +63,16 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Username'),
+                  decoration: InputDecoration(labelText: 'Email'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your email';
+                    }
+                    // Check if the email format is valid
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'Please enter a valid email';
                     }
                     return null;
                   },
@@ -133,4 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+extension on Object {
+  get code => null;
 }
