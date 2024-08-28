@@ -107,8 +107,16 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                         CircleAvatar(
                           radius: 40,
                           backgroundColor: Colors.green[200],
-                          child: Icon(Icons.person,
-                              size: 50, color: Colors.green[700]),
+                          backgroundImage:
+                              userData?['profile_picture'] != null &&
+                                      userData?['profile_picture'].isNotEmpty
+                                  ? NetworkImage(userData?['profile_picture'])
+                                  : null,
+                          child: userData?['profile_picture'] == null ||
+                                  userData?['profile_picture'].isEmpty
+                              ? Icon(Icons.person,
+                                  size: 50, color: Colors.green[700])
+                              : null,
                         ),
                         SizedBox(height: 20),
                         Text(
