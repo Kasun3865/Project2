@@ -1,3 +1,4 @@
+// screens/mood_logging_screen.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project3/screens/notifications_screen.dart';
@@ -5,6 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'my_account_screen.dart'; // Import the My Account screen
 import 'feedback_screen.dart'; // Import the FeedbackScreen
 import 'emergency_contact_screen.dart'; // Import the EmergencyContactScreen
+import '../models/mood.dart'; // Import Mood model
+import '../models/mood_provider.dart'; // Import MoodProvider
+import 'package:provider/provider.dart'; // Import Provider
 
 class MoodLoggingScreen extends StatefulWidget {
   @override
@@ -13,6 +17,9 @@ class MoodLoggingScreen extends StatefulWidget {
 
 class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
   int _notificationCount = 0;
+  String? selectedMoodIcon; // New state to hold selected mood icon
+  final TextEditingController noteController =
+      TextEditingController(); // For notes
 
   @override
   void initState() {
@@ -36,8 +43,36 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
     }
   }
 
+  void _saveMood() {
+    if (selectedMoodIcon != null) {
+      final newMood = Mood(
+        id: DateTime.now().toString(),
+        date: DateTime.now(),
+        moodType: _getMoodName(selectedMoodIcon!), // Set mood type dynamically
+        note: noteController.text,
+        icon: selectedMoodIcon!, // Store the selected mood icon
+      );
+
+      // Add the new mood to the provider or database.
+      Provider.of<MoodProvider>(context, listen: false).addMood(newMood);
+
+      // Clear the input fields after saving
+      setState(() {
+        selectedMoodIcon = null;
+        noteController.clear();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Mood saved successfully!')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final moods =
+        Provider.of<MoodProvider>(context).moods; // Access the mood history
+
     return Scaffold(
       backgroundColor: Colors.green[100],
       appBar: AppBar(
@@ -97,104 +132,63 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Month',
-                  style: TextStyle(
-                    color: Colors.green[700],
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(7, (index) {
-                return Column(
-                  children: [
-                    Text(
-                      'S M T W T F S'.split(' ')[index],
-                      style: TextStyle(
-                        color: Colors.green[700],
-                      ),
-                    ),
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundColor: Colors.white,
-                      child: Text(
-                        '${index + 7}',
-                        style: TextStyle(color: Colors.green[700]),
-                      ),
-                    ),
-                  ],
-                );
-              }),
-            ),
-            SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Select your mood:', style: TextStyle(fontSize: 18)),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    'How do you feel today?',
-                    style: TextStyle(
-                      color: Colors.green[700],
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
-                      // Logic to log the mood
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.green[50],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.add, color: Colors.green[700]),
-                          SizedBox(width: 10),
-                          Text(
-                            'Log your mood...',
-                            style: TextStyle(
-                              color: Colors.green[700],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      hintText: 'Write how you feel today...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
+                  _buildMoodIcon(
+                      'happy', Icons.sentiment_very_satisfied, 'Happy'),
+                  _buildMoodIcon(
+                      'neutral', Icons.sentiment_satisfied, 'Neutral'),
+                  _buildMoodIcon('sad', Icons.sentiment_dissatisfied, 'Sad'),
+                  _buildMoodIcon(
+                      'angry', Icons.sentiment_very_dissatisfied, 'Angry'),
                 ],
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              TextField(
+                controller: noteController,
+                decoration: InputDecoration(
+                  labelText: 'Add a note (optional)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _saveMood,
+                child: Text('Save Mood'),
+              ),
+              SizedBox(height: 20),
+              Divider(), // Separator
+              SizedBox(height: 20),
+              Text('Mood History:', style: TextStyle(fontSize: 18)),
+              SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: moods.length,
+                itemBuilder: (context, index) {
+                  // Reverse the list to display the newest first
+                  final mood = moods[moods.length - 1 - index];
+                  return ListTile(
+                    leading: Icon(_getMoodIcon(mood.icon)),
+                    title: Text(mood.moodType),
+                    subtitle: Text('${mood.date.toLocal()} \n${mood.note}'),
+                    isThreeLine: true,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -233,5 +227,65 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         ],
       ),
     );
+  }
+
+  // Helper method to build mood icon with label
+  Widget _buildMoodIcon(String moodName, IconData iconData, String label) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedMoodIcon = moodName;
+        });
+      },
+      child: Column(
+        children: [
+          Icon(
+            iconData,
+            size: 50, // Increase the size of the icons
+            color: selectedMoodIcon == moodName ? Colors.green : Colors.grey,
+          ),
+          SizedBox(height: 5),
+          Text(
+            label,
+            style: TextStyle(
+              color: selectedMoodIcon == moodName ? Colors.green : Colors.grey,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper method to get mood name based on selected icon
+  String _getMoodName(String iconName) {
+    switch (iconName) {
+      case 'happy':
+        return 'Happy mood';
+      case 'neutral':
+        return 'Neutral mood';
+      case 'sad':
+        return 'Sad mood';
+      case 'angry':
+        return 'Angry mood';
+      default:
+        return 'Mood';
+    }
+  }
+
+  // Helper method to map mood icon names to IconData
+  IconData _getMoodIcon(String iconName) {
+    switch (iconName) {
+      case 'happy':
+        return Icons.sentiment_very_satisfied;
+      case 'neutral':
+        return Icons.sentiment_satisfied;
+      case 'sad':
+        return Icons.sentiment_dissatisfied;
+      case 'angry':
+        return Icons.sentiment_very_dissatisfied;
+      default:
+        return Icons.sentiment_neutral;
+    }
   }
 }
