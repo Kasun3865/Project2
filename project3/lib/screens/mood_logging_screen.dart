@@ -1,4 +1,3 @@
-// screens/mood_logging_screen.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project3/screens/notifications_screen.dart';
@@ -9,6 +8,7 @@ import 'emergency_contact_screen.dart'; // Import the EmergencyContactScreen
 import '../models/mood.dart'; // Import Mood model
 import '../models/mood_provider.dart'; // Import MoodProvider
 import 'package:provider/provider.dart'; // Import Provider
+import 'chat_screen.dart'; // Import the ChatScreen
 
 class MoodLoggingScreen extends StatefulWidget {
   @override
@@ -205,6 +205,12 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
               context,
               MaterialPageRoute(builder: (context) => FeedbackScreen()),
             );
+          } else if (index == 4) {
+            // New case for ChatGPT Chat Screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChatScreen()),
+            );
           }
         },
         items: [
@@ -223,6 +229,10 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.star), // Feedback icon
             label: 'Feedback',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat), // Chat icon
+            label: 'Chat',
           ),
         ],
       ),
