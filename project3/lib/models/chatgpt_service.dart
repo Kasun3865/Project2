@@ -24,7 +24,7 @@ class ChatGPTService {
               'max_tokens': 100,
             }),
           )
-          .timeout(Duration(seconds: 10)); // Adding a timeout
+          .timeout(const Duration(seconds: 10)); // Adding a timeout
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

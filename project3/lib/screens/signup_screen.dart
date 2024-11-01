@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:project3/screens/login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
@@ -43,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             });
 
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                   content: Text('You have successfully created an account!')),
             );
             Navigator.pushReplacement(
@@ -53,12 +55,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Passwords do not match.')),
+            const SnackBar(content: Text('Passwords do not match.')),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Account creation failed. Please try again.')),
+          const SnackBar(
+              content: Text('Account creation failed. Please try again.')),
         );
         print(e);
       }
@@ -78,7 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Username'),
+                  decoration: const InputDecoration(labelText: 'Username'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your username';
@@ -89,9 +92,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _username = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -107,9 +110,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _email = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Password'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -121,9 +124,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _password = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Confirm password'),
+                  decoration:
+                      const InputDecoration(labelText: 'Confirm password'),
                   obscureText: true,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -135,9 +139,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _confirmPassword = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Phone number'),
+                  decoration: const InputDecoration(labelText: 'Phone number'),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -149,17 +153,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _phoneNumber = value!;
                   },
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: _trySignUp,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[700],
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 80, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Text('Create Account'),
+                  child: const Text('Create Account'),
                 ),
               ],
             ),

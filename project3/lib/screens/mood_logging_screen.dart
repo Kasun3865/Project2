@@ -11,6 +11,8 @@ import 'package:provider/provider.dart'; // Import Provider
 import 'chat_screen.dart'; // Import the ChatScreen
 
 class MoodLoggingScreen extends StatefulWidget {
+  const MoodLoggingScreen({super.key});
+
   @override
   _MoodLoggingScreenState createState() => _MoodLoggingScreenState();
 }
@@ -63,7 +65,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Mood saved successfully!')),
+        const SnackBar(content: Text('Mood saved successfully!')),
       );
     }
   }
@@ -105,18 +107,18 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                   right: 11,
                   top: 11,
                   child: Container(
-                    padding: EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    constraints: BoxConstraints(
+                    constraints: const BoxConstraints(
                       minWidth: 16,
                       minHeight: 16,
                     ),
                     child: Text(
                       '$_notificationCount',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                       ),
@@ -138,8 +140,8 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Select your mood:', style: TextStyle(fontSize: 18)),
-              SizedBox(height: 10),
+              const Text('Select your mood:', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -152,7 +154,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                       'angry', Icons.sentiment_very_dissatisfied, 'Angry'),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: noteController,
                 decoration: InputDecoration(
@@ -162,19 +164,19 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _saveMood,
-                child: Text('Save Mood'),
+                child: const Text('Save Mood'),
               ),
-              SizedBox(height: 20),
-              Divider(), // Separator
-              SizedBox(height: 20),
-              Text('Mood History:', style: TextStyle(fontSize: 18)),
-              SizedBox(height: 10),
+              const SizedBox(height: 20),
+              const Divider(), // Separator
+              const SizedBox(height: 20),
+              const Text('Mood History:', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: moods.length,
                 itemBuilder: (context, index) {
                   // Reverse the list to display the newest first
@@ -213,7 +215,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             );
           }
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Today',
@@ -254,7 +256,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             size: 50, // Increase the size of the icons
             color: selectedMoodIcon == moodName ? Colors.green : Colors.grey,
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Text(
             label,
             style: TextStyle(
