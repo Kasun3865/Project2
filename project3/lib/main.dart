@@ -12,6 +12,8 @@ void main() async {
 }
 
 class CalmApp extends StatelessWidget {
+  const CalmApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

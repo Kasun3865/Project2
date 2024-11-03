@@ -5,6 +5,8 @@ import 'forgot_password_screen.dart'; // Import the Forgot Password screen
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -45,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter both email and password.')),
+        const SnackBar(content: Text('Please enter both email and password.')),
       );
     }
   }
@@ -63,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -80,9 +82,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     _email = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Password'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -94,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     _password = value!;
                   },
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -111,25 +113,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _tryLogin,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[700],
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Text('Login'),
+                  child: const Text('Login'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
                   'Do not have an account?',
                   style: TextStyle(color: Colors.green[700]),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -139,12 +141,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[500],
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 80, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Text('Create Account'),
+                  child: const Text('Create Account'),
                 ),
               ],
             ),

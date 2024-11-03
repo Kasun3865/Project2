@@ -5,6 +5,8 @@ import '../models/mood.dart';
 import 'package:provider/provider.dart';
 
 class MoodTrackingScreen extends StatefulWidget {
+  const MoodTrackingScreen({super.key});
+
   @override
   _MoodTrackingScreenState createState() => _MoodTrackingScreenState();
 }
@@ -33,7 +35,7 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Mood saved successfully!')),
+        const SnackBar(content: Text('Mood saved successfully!')),
       );
     }
   }
@@ -41,19 +43,20 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Track Your Mood')),
+      appBar: AppBar(title: const Text('Track Your Mood')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('How are you feeling today?', style: TextStyle(fontSize: 18)),
+            const Text('How are you feeling today?',
+                style: TextStyle(fontSize: 18)),
             DropdownButton<String>(
-              hint: Text('Select your mood'),
+              hint: const Text('Select your mood'),
               value: selectedMood,
               items: ['Happy', 'Sad', 'Neutral', 'Angry', 'Excited']
                   .map((mood) => DropdownMenuItem(
-                        child: Text(mood),
                         value: mood,
+                        child: Text(mood),
                       ))
                   .toList(),
               onChanged: (value) {
@@ -64,12 +67,13 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
             ),
             TextField(
               controller: noteController,
-              decoration: InputDecoration(labelText: 'Add a note (optional)'),
+              decoration:
+                  const InputDecoration(labelText: 'Add a note (optional)'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _saveMood,
-              child: Text('Save Mood'),
+              child: const Text('Save Mood'),
             ),
           ],
         ),

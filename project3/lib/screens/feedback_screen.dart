@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FeedbackScreen extends StatefulWidget {
+  const FeedbackScreen({super.key});
+
   @override
   _FeedbackScreenState createState() => _FeedbackScreenState();
 }
@@ -32,7 +34,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Thank you for your feedback!')),
+          const SnackBar(content: Text('Thank you for your feedback!')),
         );
 
         // Optionally, clear the form after submission
@@ -86,7 +88,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             children: [
               TextFormField(
                 maxLines: 4,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Enter your feedback',
                   border: OutlineInputBorder(),
                 ),
@@ -100,36 +102,37 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitFeedback, // Call the submit feedback method
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[700],
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: Text('Send'),
+                child: const Text('Send'),
               ),
-              SizedBox(height: 32),
-              Text('Rate Us', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 32),
+              const Text('Rate Us', style: TextStyle(fontSize: 18)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (index) => _buildStar(index + 1)),
               ),
-              SizedBox(height: 32),
-              Text('Find us on', style: TextStyle(fontSize: 18)),
-              SizedBox(height: 16),
+              const SizedBox(height: 32),
+              const Text('Find us on', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(FontAwesomeIcons.twitter,
                       size: 40, color: Colors.green[700]),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Icon(FontAwesomeIcons.facebook,
                       size: 40, color: Colors.green[700]),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Icon(FontAwesomeIcons.instagram,
                       size: 40, color: Colors.green[700]),
                 ],
