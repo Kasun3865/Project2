@@ -1,26 +1,85 @@
 import 'package:flutter/material.dart';
 
 class JournalScreen extends StatelessWidget {
-  final List<String> entries = [
-    "Today, I felt a renewed sense of energy. After completing my morning routine, I took a moment to reflect on my goals...",
-    "It was a challenging day, but I managed to keep a positive mindset. I realized how important it is to focus on progress...",
-    "Gratitude has been a key part of my journey. I listed three things I'm grateful for, and it really uplifted my spirits...",
-    "I had a productive day, working on both personal and professional growth. Staying focused on my wellness goals has been rewarding..."
+  final List<Article> articles = [
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Journal"),
+        title: Text("Resources"),
+        backgroundColor: Colors.greenAccent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: entries.length,
+        child: GridView.builder(
+          itemCount: articles.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
           itemBuilder: (context, index) {
-            return JournalEntry(
-              text: entries[index],
+            return ArticleCard(
+              article: articles[index],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ArticleDetailScreen(article: articles[index]),
+                  ),
+                );
+              },
             );
           },
         ),
@@ -29,57 +88,81 @@ class JournalScreen extends StatelessWidget {
   }
 }
 
-class JournalEntry extends StatefulWidget {
-  final String text;
+class Article {
+  final String title;
+  final String image;
+  final String content;
 
-  const JournalEntry({Key? key, required this.text}) : super(key: key);
-
-  @override
-  _JournalEntryState createState() => _JournalEntryState();
+  Article({required this.title, required this.image, required this.content});
 }
 
-class _JournalEntryState extends State<JournalEntry> {
-  bool _isHovered = false;
+class ArticleCard extends StatelessWidget {
+  final Article article;
+  final VoidCallback onTap;
+
+  const ArticleCard({Key? key, required this.article, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.all(16),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: _isHovered
-                ? [Colors.blueAccent, Colors.lightBlueAccent]
-                : [
-                    const Color.fromARGB(255, 22, 177, 99),
-                    const Color.fromARGB(255, 71, 241, 148)
-                  ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Colors.greenAccent,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
-                  ),
-                ]
-              : [],
         ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  article.image,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(Icons.error),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                article.title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ArticleDetailScreen extends StatelessWidget {
+  final Article article;
+
+  const ArticleDetailScreen({Key? key, required this.article})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(article.title),
+        backgroundColor: Colors.greenAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Text(
-          widget.text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            height: 1.5,
-          ),
+          article.content,
+          style: TextStyle(fontSize: 18, height: 1.5),
         ),
       ),
     );
