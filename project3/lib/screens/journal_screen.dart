@@ -54,7 +54,10 @@ class _JournalEntryState extends State<JournalEntry> {
           gradient: LinearGradient(
             colors: _isHovered
                 ? [Colors.blueAccent, Colors.lightBlueAccent]
-                : [Colors.purpleAccent, Colors.deepPurpleAccent],
+                : [
+                    const Color.fromARGB(255, 0, 207, 17),
+                    const Color.fromARGB(255, 109, 255, 134)
+                  ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
