@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project3/screens/notifications_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
-import 'my_account_screen.dart'; // Import the My Account screen
-import 'feedback_screen.dart'; // Import the FeedbackScreen
-import 'emergency_contact_screen.dart'; // Import the EmergencyContactScreen
-import '../models/mood.dart'; // Import Mood model
-import '../models/mood_provider.dart'; // Import MoodProvider
-import 'package:provider/provider.dart'; // Import Provider
-import 'chat_screen.dart'; // Import the ChatScreen
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'my_account_screen.dart';
+import 'feedback_screen.dart';
+import 'emergency_contact_screen.dart';
+import '../models/mood.dart';
+import '../models/mood_provider.dart';
+import 'package:provider/provider.dart';
+import 'chat_screen.dart';
+import 'journal_screen.dart'; // Import the JournalScreen
 
 class MoodLoggingScreen extends StatefulWidget {
   const MoodLoggingScreen({super.key});
@@ -19,9 +20,8 @@ class MoodLoggingScreen extends StatefulWidget {
 
 class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
   int _notificationCount = 0;
-  String? selectedMoodIcon; // New state to hold selected mood icon
-  final TextEditingController noteController =
-      TextEditingController(); // For notes
+  String? selectedMoodIcon;
+  final TextEditingController noteController = TextEditingController();
 
   @override
   void initState() {
@@ -50,15 +50,13 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
       final newMood = Mood(
         id: DateTime.now().toString(),
         date: DateTime.now(),
-        moodType: _getMoodName(selectedMoodIcon!), // Set mood type dynamically
+        moodType: _getMoodName(selectedMoodIcon!),
         note: noteController.text,
-        icon: selectedMoodIcon!, // Store the selected mood icon
+        icon: selectedMoodIcon!,
       );
 
-      // Add the new mood to the provider or database.
       Provider.of<MoodProvider>(context, listen: false).addMood(newMood);
 
-      // Clear the input fields after saving
       setState(() {
         selectedMoodIcon = null;
         noteController.clear();
@@ -72,8 +70,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final moods =
-        Provider.of<MoodProvider>(context).moods; // Access the mood history
+    final moods = Provider.of<MoodProvider>(context).moods;
 
     return Scaffold(
       backgroundColor: Colors.green[100],
@@ -170,7 +167,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                 child: const Text('Save Mood'),
               ),
               const SizedBox(height: 20),
-              const Divider(), // Separator
+              const Divider(),
               const SizedBox(height: 20),
               const Text('Mood History:', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
@@ -179,7 +176,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: moods.length,
                 itemBuilder: (context, index) {
-                  // Reverse the list to display the newest first
                   final mood = moods[moods.length - 1 - index];
                   return ListTile(
                     leading: Icon(_getMoodIcon(mood.icon)),
@@ -197,7 +193,12 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         selectedItemColor: Colors.green[700],
         unselectedItemColor: Colors.green[300],
         onTap: (int index) {
-          if (index == 2) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => JournalScreen()),
+            );
+          } else if (index == 2) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => EmergencyContactScreen()),
@@ -208,7 +209,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
               MaterialPageRoute(builder: (context) => FeedbackScreen()),
             );
           } else if (index == 4) {
-            // New case for ChatGPT Chat Screen
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ChatScreen()),
@@ -229,11 +229,11 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             label: 'Emergency Contacts',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star), // Feedback icon
+            icon: Icon(Icons.star),
             label: 'Feedback',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat), // Chat icon
+            icon: Icon(Icons.chat),
             label: 'Chat',
           ),
         ],
@@ -241,7 +241,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
     );
   }
 
-  // Helper method to build mood icon with label
   Widget _buildMoodIcon(String moodName, IconData iconData, String label) {
     return GestureDetector(
       onTap: () {
@@ -253,7 +252,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         children: [
           Icon(
             iconData,
-            size: 50, // Increase the size of the icons
+            size: 50,
             color: selectedMoodIcon == moodName ? Colors.green : Colors.grey,
           ),
           const SizedBox(height: 5),
@@ -269,7 +268,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
     );
   }
 
-  // Helper method to get mood name based on selected icon
   String _getMoodName(String iconName) {
     switch (iconName) {
       case 'happy':
@@ -285,7 +283,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
     }
   }
 
-  // Helper method to map mood icon names to IconData
   IconData _getMoodIcon(String iconName) {
     switch (iconName) {
       case 'happy':
