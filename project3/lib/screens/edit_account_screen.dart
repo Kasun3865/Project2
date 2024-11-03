@@ -8,6 +8,8 @@ import 'package:project3/screens/storage_service.dart'; // For file handling
 // Import the storage service
 
 class EditAccountScreen extends StatefulWidget {
+  const EditAccountScreen({super.key});
+
   @override
   _EditAccountScreenState createState() => _EditAccountScreenState();
 }
@@ -102,13 +104,14 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Account details updated successfully!')),
+          const SnackBar(
+              content: Text('Account details updated successfully!')),
         );
         Navigator.pop(context);
       } catch (e) {
         print('Failed to update account details: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update account details.')),
+          const SnackBar(content: Text('Failed to update account details.')),
         );
       }
     }
@@ -147,16 +150,17 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           ? FileImage(_image!)
                           : (_profileImageUrl.isNotEmpty
                                   ? NetworkImage(_profileImageUrl)
-                                  : AssetImage('assets/default_profile.png'))
+                                  : const AssetImage(
+                                      'assets/default_profile.png'))
                               as ImageProvider,
-                      child: Icon(
+                      child: const Icon(
                         Icons.camera_alt,
                         color: Colors.white,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   initialValue: _username,
                   decoration: InputDecoration(
@@ -167,7 +171,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     _username = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   initialValue: _email,
                   decoration: InputDecoration(
@@ -188,7 +192,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -199,7 +203,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     _password = value!;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextFormField(
                   initialValue: _phoneNumber,
                   decoration: InputDecoration(
@@ -210,7 +214,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     _phoneNumber = value!;
                   },
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 Center(
                   child: ElevatedButton(
                     onPressed: () async {
@@ -219,13 +223,13 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[700],
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 80, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text('Save Changes'),
+                    child: const Text('Save Changes'),
                   ),
                 ),
               ],

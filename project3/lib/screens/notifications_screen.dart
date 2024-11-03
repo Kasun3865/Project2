@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class NotificationsScreen extends StatefulWidget {
+  const NotificationsScreen({super.key});
+
   @override
   _NotificationsScreenState createState() => _NotificationsScreenState();
 }
@@ -53,11 +55,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         future: _fetchNotifications(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Failed to load notifications.'));
+            return const Center(child: Text('Failed to load notifications.'));
           } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-            return Center(child: Text('No notifications available.'));
+            return const Center(child: Text('No notifications available.'));
           } else {
             List<DocumentSnapshot> notifications = snapshot.data ?? [];
 
@@ -69,7 +71,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               itemCount: notifications.length,
               itemBuilder: (context, index) {
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: ListTile(
                     leading:
                         Icon(Icons.notifications, color: Colors.green[700]),

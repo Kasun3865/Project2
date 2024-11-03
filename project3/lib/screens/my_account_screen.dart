@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'edit_account_screen.dart'; // Import the edit account screen
 
 class MyAccountScreen extends StatefulWidget {
+  const MyAccountScreen({super.key});
+
   @override
   _MyAccountScreenState createState() => _MyAccountScreenState();
 }
@@ -35,14 +37,14 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             userData = {}; // Set userData as an empty map to indicate no data
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('No user data found.')),
+            const SnackBar(content: Text('No user data found.')),
           );
         }
       }
     } catch (e) {
       print("Error fetching user data: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
             content:
                 Text('Failed to fetch user data. Please try again later.')),
       );
@@ -57,7 +59,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
       Navigator.popUntil(context, ModalRoute.withName('/'));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete account.')),
+        const SnackBar(content: Text('Failed to delete account.')),
       );
     }
   }
@@ -77,9 +79,9 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         title: Text('My Account', style: TextStyle(color: Colors.green[700])),
       ),
       body: userData == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : userData!.isEmpty
-              ? Center(
+              ? const Center(
                   child: Text(
                     'No user data available.',
                     style: TextStyle(color: Colors.red, fontSize: 18),
@@ -88,7 +90,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
@@ -97,7 +99,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -118,7 +120,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                                   size: 50, color: Colors.green[700])
                               : null,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Text(
                           userData?['username'] ?? 'User Name',
                           style: TextStyle(
@@ -126,34 +128,34 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                               fontWeight: FontWeight.bold,
                               color: Colors.green[700]),
                         ),
-                        SizedBox(height: 10),
-                        Divider(),
+                        const SizedBox(height: 10),
+                        const Divider(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.email, color: Colors.green[700]),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Text(
                               user?.email ?? 'xxxxx@xxxxx.com',
                               style: TextStyle(color: Colors.green[700]),
                             ),
                           ],
                         ),
-                        Divider(),
-                        SizedBox(height: 10),
+                        const Divider(),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.phone, color: Colors.green[700]),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Text(
                               userData?['phone_number'] ?? 'Phone Number',
                               style: TextStyle(color: Colors.green[700]),
                             ),
                           ],
                         ),
-                        Divider(),
-                        SizedBox(height: 30),
+                        const Divider(),
+                        const SizedBox(height: 30),
                         ElevatedButton.icon(
                           onPressed: () {
                             Navigator.push(
@@ -162,25 +164,25 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                                   builder: (context) => EditAccountScreen()),
                             );
                           },
-                          icon: Icon(Icons.edit, color: Colors.white),
-                          label: Text('Edit Account Details'),
+                          icon: const Icon(Icons.edit, color: Colors.white),
+                          label: const Text('Edit Account Details'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green[700],
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 60, vertical: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         ElevatedButton.icon(
                           onPressed: _deleteAccount,
-                          icon: Icon(Icons.delete, color: Colors.white),
-                          label: Text('Delete Account'),
+                          icon: const Icon(Icons.delete, color: Colors.white),
+                          label: const Text('Delete Account'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red[700],
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 60, vertical: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),

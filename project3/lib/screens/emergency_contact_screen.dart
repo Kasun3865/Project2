@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EmergencyContactScreen extends StatefulWidget {
+  const EmergencyContactScreen({super.key});
+
   @override
   _EmergencyContactScreenState createState() => _EmergencyContactScreenState();
 }
@@ -46,7 +48,7 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
       } catch (e) {
         print('Failed to fetch contacts: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to fetch contacts')),
+          const SnackBar(content: Text('Failed to fetch contacts')),
         );
       }
     }
@@ -77,12 +79,12 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Contact added successfully')),
+            const SnackBar(content: Text('Contact added successfully')),
           );
         } catch (e) {
           print('Failed to add contact: $e');
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to add contact')),
+            const SnackBar(content: Text('Failed to add contact')),
           );
         }
       }
@@ -108,12 +110,12 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Contact deleted successfully')),
+          const SnackBar(content: Text('Contact deleted successfully')),
         );
       } catch (e) {
         print('Failed to delete contact: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete contact')),
+          const SnackBar(content: Text('Failed to delete contact')),
         );
       }
     }
@@ -167,7 +169,7 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
                 },
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text('Create a contact',
                 style: TextStyle(fontSize: 16, color: Colors.green[700])),
             Form(
@@ -175,7 +177,7 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Name'),
+                    decoration: const InputDecoration(labelText: 'Name'),
                     onSaved: (value) {
                       _name = value ?? '';
                     },
@@ -187,7 +189,8 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
                     },
                   ),
                   TextFormField(
-                    decoration: InputDecoration(labelText: 'Phone Number'),
+                    decoration:
+                        const InputDecoration(labelText: 'Phone Number'),
                     keyboardType: TextInputType.phone,
                     onSaved: (value) {
                       _phoneNumber = value ?? '';
@@ -199,18 +202,18 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _addContact,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green[700],
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 80, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text('Add'),
+                    child: const Text('Add'),
                   ),
                 ],
               ),

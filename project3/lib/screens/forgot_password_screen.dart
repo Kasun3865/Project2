@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
   @override
   _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
@@ -17,13 +19,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       try {
         await _auth.sendPasswordResetEmail(email: _email);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Password reset email sent!')),
+          const SnackBar(content: Text('Password reset email sent!')),
         );
         Navigator.pop(context); // Go back to the login screen
       } catch (e) {
         print(e);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send reset email')),
+          const SnackBar(content: Text('Failed to send reset email')),
         );
       }
     }
@@ -33,7 +35,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green[100],
-      appBar: AppBar(title: Text('Reset Password')),
+      appBar: AppBar(title: const Text('Reset Password')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -43,7 +45,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Email'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -55,17 +57,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     _email = value!;
                   },
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: _resetPassword,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[700],
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 80, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Text('Reset Password'),
+                  child: const Text('Reset Password'),
                 ),
               ],
             ),
