@@ -1,18 +1,63 @@
 import 'package:flutter/material.dart';
 
 class JournalScreen extends StatelessWidget {
-  final List<String> entries = [
-    "Today, I felt a renewed sense of energy. After completing my morning routine, I took a moment to reflect on my goals...",
-    "It was a challenging day, but I managed to keep a positive mindset. I realized how important it is to focus on progress...",
-    "Gratitude has been a key part of my journey. I listed three things I'm grateful for, and it really uplifted my spirits...",
-    "I had a productive day, working on both personal and professional growth. Staying focused on my wellness goals has been rewarding..."
+  final List<Article> articles = [
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
+    Article(
+      title: "Article 01",
+      image: "assets/Article.jpg",
+      content:
+          "Supporting men’s mental health is crucial, and there are several impactful ways to raise awareness and encourage well-being. First, creating safe, non-judgmental spaces for open conversations can help men feel less isolated. Integrating physical activities, such as group sports or wellness events, can also promote mental resilience by connecting physical and mental wellness. ",
+    ),
+    Article(
+      title: "Article 02",
+      image: "assets/Article2.jpg",
+      content: "This is the content of Article 02...",
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Journal"),
+        title: Text("Resources"),
+        backgroundColor: Colors.greenAccent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

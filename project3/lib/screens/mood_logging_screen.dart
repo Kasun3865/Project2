@@ -125,6 +125,10 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                 ),
             ],
           ),
+          IconButton(
+            icon: Icon(Icons.menu, color: Colors.green[700]),
+            onPressed: () {},
+          ),
         ],
       ),
       body: SingleChildScrollView(
