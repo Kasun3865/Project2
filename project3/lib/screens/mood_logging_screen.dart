@@ -246,7 +246,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             label: 'Today',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.insights),
+            icon: Icon(Icons.menu_book),
             label: 'Insights',
           ),
           BottomNavigationBarItem(
@@ -263,7 +263,7 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           ),
           BottomNavigationBarItem(
             // New Resources item
-            icon: Icon(Icons.menu_book),
+            icon: Icon(Icons.insights),
             label: 'Resources',
           ),
         ],

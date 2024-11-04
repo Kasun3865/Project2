@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'game_screen.dart'; // Import the GameScreen
 
 class ResourcesScreen extends StatelessWidget {
   const ResourcesScreen({super.key});
@@ -14,23 +15,23 @@ class ResourcesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            ListTile(
-              title: const Text('Mental Health Resources'),
-              subtitle: const Text(
-                  'Find various resources to help you with mental health.'),
-              onTap: () {
-                // Navigate to more information or external links
-              },
+            const SizedBox(height: 20),
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.videogame_asset,
+                    color: Colors.green[700]), // Game icon
+                title: const Text('Games'),
+                subtitle:
+                    const Text('Take a break and play some engaging games.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const GameScreen()),
+                  );
+                },
+              ),
             ),
-            ListTile(
-              title: const Text('Self-Care Tips'),
-              subtitle: const Text(
-                  'Tips for taking care of your mental and emotional health.'),
-              onTap: () {
-                // Navigate to more information or external links
-              },
-            ),
-            // Add more resources as needed
           ],
         ),
       ),
