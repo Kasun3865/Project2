@@ -32,7 +32,7 @@ class MoodChart extends StatelessWidget {
         children: moodCounts.entries.map((entry) {
           return Padding(
             padding: const EdgeInsets.symmetric(
-                vertical: 2.0), // Add some vertical spacing
+                vertical: 1.0), // Add some vertical spacing
             child: Row(
               mainAxisAlignment:
                   MainAxisAlignment.start, // Align items to the start

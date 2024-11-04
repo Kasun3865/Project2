@@ -6,12 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'my_account_screen.dart';
 import 'feedback_screen.dart';
 import 'emergency_contact_screen.dart';
+import 'resources_screen.dart'; // Import the ResourcesScreen
 import '../models/mood.dart';
 import '../models/mood_provider.dart';
 import 'package:provider/provider.dart';
 import 'chat_screen.dart';
 import 'journal_screen.dart'; // Import the JournalScreen
-import '../widgets/mood_chart.dart'; // Import the MoodChart
+// Import the MoodChart
 
 class MoodLoggingScreen extends StatefulWidget {
   const MoodLoggingScreen({super.key});
@@ -68,6 +69,13 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         const SnackBar(content: Text('Mood saved successfully!')),
       );
     }
+  }
+
+  void _navigateToResources() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ResourcesScreen()),
+    );
   }
 
   @override
@@ -127,10 +135,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
                 ),
             ],
           ),
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.green[700]),
-            onPressed: () {},
-          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -139,7 +143,6 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // MoodChart placed at the top
               const Text('Mood Insights:', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
               MoodChart(moods: moods), // Integrate MoodChart here
@@ -201,7 +204,14 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         selectedItemColor: Colors.green[700],
         unselectedItemColor: Colors.green[300],
         onTap: (int index) {
-          if (index == 1) {
+          if (index == 0) {
+            // Today - MoodLoggingScreen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MoodLoggingScreen()),
+            );
+          } else if (index == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => JournalScreen()),
@@ -220,6 +230,13 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ChatScreen()),
+            );
+          } else if (index == 5) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      const ResourcesScreen()), // Navigate to Resources
             );
           }
         },
@@ -243,6 +260,11 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            // New Resources item
+            icon: Icon(Icons.menu_book),
+            label: 'Resources',
           ),
         ],
       ),
