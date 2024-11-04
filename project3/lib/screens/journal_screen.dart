@@ -11,7 +11,7 @@ class JournalScreen extends StatelessWidget {
     Article(
       title: "Article 02",
       image: "assets/Article2.jpg",
-      content: "This is the content of Article 02...",
+      content: "This is the content of Article 002...",
     ),
     Article(
       title: "Article 01",
