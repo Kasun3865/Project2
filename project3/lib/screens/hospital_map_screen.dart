@@ -28,14 +28,14 @@ class HospitalMapScreen extends StatelessWidget {
     },
     {
       'name': 'Kandy General Hospital',
-      'phone': '081 223 4567',
+      'phone': '011 223 4567',
       'address': '11, Hospital Road, Kandy',
       'services': 'General, Trauma, Rehabilitation',
       'rating': '4.3',
     },
     {
       'name': 'Teaching Hospital Karapitiya',
-      'phone': '091 234 5678',
+      'phone': '011 234 5678',
       'address': 'Karapitiya, Galle',
       'services': 'General, Oncology, Radiology',
       'rating': '4.2',

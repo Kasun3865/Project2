@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'game_screen.dart'; // Import the GameScreen
 import 'hospital_map_screen.dart'; // Import the HospitalMapScreen
+import 'eye_test_screen.dart'; // Import the EyeTestScreen
 
 class ResourcesScreen extends StatelessWidget {
   const ResourcesScreen({super.key});
@@ -47,6 +48,23 @@ class ResourcesScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => HospitalMapScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Eye Test card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.visibility, color: Colors.green[700]),
+                title: const Text('Eye Test'),
+                subtitle: const Text('Check your vision with our eye test.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const EyeTestScreen()),
                   );
                 },
               ),
