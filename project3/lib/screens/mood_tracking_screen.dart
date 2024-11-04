@@ -15,49 +15,36 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
   String? selectedMood;
   TextEditingController noteController = TextEditingController();
 
-  // Function to get the icon and color based on selected mood
-  IconData? _getMoodIcon(String mood) {
-    switch (mood) {
-      case 'Happy':
-        return Icons.sentiment_very_satisfied;
-      case 'Sad':
-        return Icons.sentiment_dissatisfied;
-      case 'Neutral':
-        return Icons.sentiment_neutral;
-      case 'Angry':
-        return Icons.sentiment_very_dissatisfied;
-      case 'Excited':
-        return Icons.sentiment_satisfied_alt;
-      default:
-        return null;
-    }
-  }
-
-  Color? _getMoodColor(String mood) {
-    switch (mood) {
-      case 'Happy':
-        return Colors.yellow; // Bright yellow for happiness
-      case 'Sad':
-        return Colors.blue; // Calming blue for sadness
-      case 'Neutral':
-        return Colors.grey; // Neutral grey
-      case 'Angry':
-        return Colors.red; // Intense red for anger
-      case 'Excited':
-        return Colors.orange; // Vibrant orange for excitement
-      default:
-        return Colors.black;
-    }
-  }
-
   void _saveMood() {
     if (selectedMood != null) {
+      // Assign a specific icon color for each mood type
+      String iconColor;
+      switch (selectedMood) {
+        case 'Happy':
+          iconColor = 'yellow';
+          break;
+        case 'Sad':
+          iconColor = 'blue';
+          break;
+        case 'Neutral':
+          iconColor = 'grey';
+          break;
+        case 'Angry':
+          iconColor = 'red';
+          break;
+        case 'Excited':
+          iconColor = 'orange';
+          break;
+        default:
+          iconColor = 'grey';
+      }
+
       final newMood = Mood(
         id: DateTime.now().toString(),
         date: DateTime.now(),
         moodType: selectedMood!,
         note: noteController.text,
-        icon: '', // You can set an icon name if needed
+        icon: iconColor, // Store the icon color
       );
 
       // Add the new mood to the provider or database.
@@ -77,6 +64,8 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final moods = Provider.of<MoodProvider>(context).moods;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Track Your Mood')),
       body: Padding(
@@ -91,17 +80,7 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
               items: ['Happy', 'Sad', 'Neutral', 'Angry', 'Excited']
                   .map((mood) => DropdownMenuItem(
                         value: mood,
-                        child: Row(
-                          children: [
-                            Icon(
-                              _getMoodIcon(mood),
-                              color: _getMoodColor(
-                                  mood), // Set icon color based on mood
-                            ),
-                            const SizedBox(width: 8),
-                            Text(mood),
-                          ],
-                        ),
+                        child: Text(mood),
                       ))
                   .toList(),
               onChanged: (value) {
@@ -110,27 +89,6 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
                 });
               },
             ),
-            const SizedBox(height: 20),
-            if (selectedMood != null) // Display selected mood icon
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    _getMoodIcon(selectedMood!),
-                    color: _getMoodColor(selectedMood!),
-                    size: 40, // Icon size
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    selectedMood!,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: _getMoodColor(selectedMood!),
-                    ),
-                  ),
-                ],
-              ),
-            const SizedBox(height: 20),
             TextField(
               controller: noteController,
               decoration:
@@ -141,9 +99,57 @@ class _MoodTrackingScreenState extends State<MoodTrackingScreen> {
               onPressed: _saveMood,
               child: const Text('Save Mood'),
             ),
+            const SizedBox(height: 20),
+            const Divider(),
+            const Text('Mood History:', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: moods.length,
+                itemBuilder: (context, index) {
+                  final mood = moods[moods.length - 1 - index];
+                  return ListTile(
+                    leading: _getColoredIcon(mood.icon),
+                    title: Text(mood.moodType),
+                    subtitle: Text('${mood.date.toLocal()} \n${mood.note}'),
+                    isThreeLine: true,
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  // Returns an icon with color based on the mood type
+  Icon _getColoredIcon(String iconColor) {
+    Color color;
+    switch (iconColor) {
+      case 'yellow':
+        color = Colors.yellow;
+        break;
+      case 'blue':
+        color = Colors.blue;
+        break;
+      case 'grey':
+        color = Colors.grey;
+        break;
+      case 'red':
+        color = Colors.red;
+        break;
+      case 'orange':
+        color = Colors.orange;
+        break;
+      default:
+        color = Colors.grey;
+    }
+
+    return Icon(
+      Icons.circle, // Use a circle icon as the colored indicator
+      color: color,
+      size: 40,
     );
   }
 }

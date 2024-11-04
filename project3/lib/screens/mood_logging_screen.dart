@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project3/screens/mood_chart.dart';
 import 'package:project3/screens/notifications_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'my_account_screen.dart';
@@ -10,6 +11,7 @@ import '../models/mood_provider.dart';
 import 'package:provider/provider.dart';
 import 'chat_screen.dart';
 import 'journal_screen.dart'; // Import the JournalScreen
+import '../widgets/mood_chart.dart'; // Import the MoodChart
 
 class MoodLoggingScreen extends StatefulWidget {
   const MoodLoggingScreen({super.key});
@@ -137,18 +139,24 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // MoodChart placed at the top
+              const Text('Mood Insights:', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
+              MoodChart(moods: moods), // Integrate MoodChart here
+              const SizedBox(height: 20), // Add space after the chart
               const Text('Select your mood:', style: TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  _buildMoodIcon('happy', Icons.sentiment_very_satisfied,
+                      'Happy', const Color.fromARGB(255, 6, 202, 160)),
+                  _buildMoodIcon('neutral', Icons.sentiment_satisfied,
+                      'Neutral', Colors.blue),
                   _buildMoodIcon(
-                      'happy', Icons.sentiment_very_satisfied, 'Happy'),
-                  _buildMoodIcon(
-                      'neutral', Icons.sentiment_satisfied, 'Neutral'),
-                  _buildMoodIcon('sad', Icons.sentiment_dissatisfied, 'Sad'),
-                  _buildMoodIcon(
-                      'angry', Icons.sentiment_very_dissatisfied, 'Angry'),
+                      'sad', Icons.sentiment_dissatisfied, 'Sad', Colors.grey),
+                  _buildMoodIcon('angry', Icons.sentiment_very_dissatisfied,
+                      'Angry', Colors.red),
                 ],
               ),
               const SizedBox(height: 20),
@@ -241,7 +249,8 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
     );
   }
 
-  Widget _buildMoodIcon(String moodName, IconData iconData, String label) {
+  Widget _buildMoodIcon(
+      String moodName, IconData iconData, String label, Color color) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -253,13 +262,15 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
           Icon(
             iconData,
             size: 50,
-            color: selectedMoodIcon == moodName ? Colors.green : Colors.grey,
+            color:
+                selectedMoodIcon == moodName ? color : color.withOpacity(0.5),
           ),
           const SizedBox(height: 5),
           Text(
             label,
             style: TextStyle(
-              color: selectedMoodIcon == moodName ? Colors.green : Colors.grey,
+              color:
+                  selectedMoodIcon == moodName ? color : color.withOpacity(0.5),
               fontSize: 14,
             ),
           ),

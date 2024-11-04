@@ -15,7 +15,7 @@ class Mood {
     required this.icon,
   });
 
-  // Convert a Mood object into a Map. The keys must correspond to the names of the columns in the database.
+  // Convert a Mood object into a Map.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
