@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math'; // Importing this for generating random colors
 
 class PuzzleGameScreen extends StatefulWidget {
   const PuzzleGameScreen({super.key});
@@ -10,6 +11,16 @@ class PuzzleGameScreen extends StatefulWidget {
 class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
   List<int> puzzlePieces =
       List.generate(8, (index) => index + 1) + [0]; // 0 as the empty space
+  List<Color> colors = [
+    Colors.teal,
+    Colors.amber,
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.purple,
+    Colors.orange,
+    Colors.cyan,
+  ];
 
   @override
   void initState() {
@@ -67,11 +78,15 @@ class _PuzzleGameScreenState extends State<PuzzleGameScreen> {
   // A tile that can be moved if adjacent to the empty space.
   Widget _buildPuzzleTile(int number, int index) {
     bool isEmpty = number == 0;
+    Color tileColor = isEmpty
+        ? Colors.transparent
+        : colors[index % colors.length]; // Assign color based on the index
+
     return GestureDetector(
       onTap: () => _moveTile(index),
       child: Container(
         decoration: BoxDecoration(
-          color: isEmpty ? Colors.transparent : Colors.teal[100],
+          color: tileColor,
           borderRadius: BorderRadius.circular(8),
           boxShadow: isEmpty
               ? []
