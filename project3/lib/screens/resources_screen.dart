@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'game_screen.dart'; // Import the GameScreen
 import 'hospital_map_screen.dart'; // Import the HospitalMapScreen
 import 'eye_test_screen.dart'; // Import the EyeTestScreen
+import 'pharmacy_map_screen.dart'; // Import the PharmacyMapScreen
+import 'health_education_screen.dart'; // Import the HealthEducationScreen
 
 class ResourcesScreen extends StatelessWidget {
   const ResourcesScreen({super.key});
@@ -53,6 +55,24 @@ class ResourcesScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
+            // Pharmacy card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.local_pharmacy, color: Colors.green[700]),
+                title: const Text('Nearby Pharmacies'),
+                subtitle:
+                    const Text('Find nearby pharmacies and their services.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PharmacyMapScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
             // Eye Test card
             Card(
               color: Colors.green[50],
@@ -65,6 +85,23 @@ class ResourcesScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const EyeTestScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Health Education card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.school, color: Colors.green[700]),
+                title: const Text('Health Education'),
+                subtitle: const Text('Learn about health topics and tips.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HealthEducationScreen()),
                   );
                 },
               ),
