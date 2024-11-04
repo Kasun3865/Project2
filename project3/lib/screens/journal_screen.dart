@@ -16,11 +16,25 @@ class JournalScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: entries.length,
+        child: GridView.builder(
+          itemCount: articles.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
           itemBuilder: (context, index) {
-            return JournalEntry(
-              text: entries[index],
+            return ArticleCard(
+              article: articles[index],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ArticleDetailScreen(article: articles[index]),
+                  ),
+                );
+              },
             );
           },
         ),
@@ -29,57 +43,81 @@ class JournalScreen extends StatelessWidget {
   }
 }
 
-class JournalEntry extends StatefulWidget {
-  final String text;
+class Article {
+  final String title;
+  final String image;
+  final String content;
 
-  const JournalEntry({Key? key, required this.text}) : super(key: key);
-
-  @override
-  _JournalEntryState createState() => _JournalEntryState();
+  Article({required this.title, required this.image, required this.content});
 }
 
-class _JournalEntryState extends State<JournalEntry> {
-  bool _isHovered = false;
+class ArticleCard extends StatelessWidget {
+  final Article article;
+  final VoidCallback onTap;
+
+  const ArticleCard({Key? key, required this.article, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.all(16),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: _isHovered
-                ? [Colors.blueAccent, Colors.lightBlueAccent]
-                : [
-                    const Color.fromARGB(255, 0, 207, 17),
-                    const Color.fromARGB(255, 109, 255, 134)
-                  ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Colors.greenAccent,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
-                  ),
-                ]
-              : [],
         ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  article.image,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) =>
+                      Icon(Icons.error),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                article.title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ArticleDetailScreen extends StatelessWidget {
+  final Article article;
+
+  const ArticleDetailScreen({Key? key, required this.article})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(article.title),
+        backgroundColor: Colors.greenAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Text(
-          widget.text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            height: 1.5,
-          ),
+          article.content,
+          style: TextStyle(fontSize: 18, height: 1.5),
         ),
       ),
     );
