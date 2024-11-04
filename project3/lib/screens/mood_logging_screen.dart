@@ -1,18 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:project3/screens/notifications_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:project3/screens/notifications_screen.dart';
 import 'my_account_screen.dart';
 import 'feedback_screen.dart';
 import 'emergency_contact_screen.dart';
+import 'chat_screen.dart';
+import 'journal_screen.dart';
 import '../models/mood.dart';
 import '../models/mood_provider.dart';
 import 'package:provider/provider.dart';
-import 'chat_screen.dart';
-import 'journal_screen.dart'; // Import the JournalScreen
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:flutter_tts/flutter_tts.dart';
 
 class MoodLoggingScreen extends StatefulWidget {
-  const MoodLoggingScreen({super.key});
+  const MoodLoggingScreen({Key? key}) : super(key: key);
 
   @override
   _MoodLoggingScreenState createState() => _MoodLoggingScreenState();
@@ -22,11 +24,27 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
   int _notificationCount = 0;
   String? selectedMoodIcon;
   final TextEditingController noteController = TextEditingController();
+  late stt.SpeechToText _speech;
+  late FlutterTts _tts;
+  bool _isListening = false;
 
   @override
   void initState() {
     super.initState();
+    _speech = stt.SpeechToText();
+    _tts = FlutterTts();
+    _initializeVoiceRecognition();
     _fetchNotificationCount();
+  }
+
+  Future<void> _initializeVoiceRecognition() async {
+    bool available = await _speech.initialize(
+      onStatus: (status) => print('Status: $status'),
+      onError: (error) => print('Error: $error'),
+    );
+    if (!available) {
+      print("Speech recognition is not available on this device.");
+    }
   }
 
   Future<void> _fetchNotificationCount() async {
@@ -43,6 +61,47 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         _notificationCount = snapshot.docs.length;
       });
     }
+  }
+
+  void _startListening() {
+    if (!_isListening) {
+      _speech.listen(onResult: (result) {
+        if (result.finalResult) {
+          _processCommand(result.recognizedWords.toLowerCase());
+        }
+      });
+      setState(() => _isListening = true);
+    }
+  }
+
+  void _stopListening() {
+    _speech.stop();
+    setState(() => _isListening = false);
+  }
+
+  void _processCommand(String command) {
+    if (command.contains("journal")) {
+      _navigateTo(JournalScreen(), "Opening Journal");
+    } else if (command.contains("notifications")) {
+      _navigateTo(NotificationsScreen(), "Opening Notifications");
+    } else if (command.contains("emergency")) {
+      _navigateTo(EmergencyContactScreen(), "Opening Emergency Contacts");
+    } else if (command.contains("feedback")) {
+      _navigateTo(FeedbackScreen(), "Opening Feedback");
+    } else if (command.contains("chat")) {
+      _navigateTo(ChatScreen(), "Opening Chat");
+    } else {
+      _tts.speak("Command not recognized. Please try again.");
+    }
+  }
+
+  void _navigateTo(Widget screen, String message) {
+    _tts.speak(message);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+    _stopListening();
   }
 
   void _saveMood() {
@@ -64,6 +123,10 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Mood saved successfully!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a mood first.')),
       );
     }
   }
@@ -126,8 +189,15 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
             ],
           ),
           IconButton(
-            icon: Icon(Icons.menu, color: Colors.green[700]),
-            onPressed: () {},
+            icon: Icon(Icons.mic,
+                color: _isListening ? Colors.red : Colors.green[700]),
+            onPressed: () {
+              if (_isListening) {
+                _stopListening();
+              } else {
+                _startListening();
+              }
+            },
           ),
         ],
       ),
@@ -193,26 +263,34 @@ class _MoodLoggingScreenState extends State<MoodLoggingScreen> {
         selectedItemColor: Colors.green[700],
         unselectedItemColor: Colors.green[300],
         onTap: (int index) {
-          if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => JournalScreen()),
-            );
-          } else if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => EmergencyContactScreen()),
-            );
-          } else if (index == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FeedbackScreen()),
-            );
-          } else if (index == 4) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ChatScreen()),
-            );
+          switch (index) {
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => JournalScreen()),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EmergencyContactScreen()),
+              );
+              break;
+            case 3:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FeedbackScreen()),
+              );
+              break;
+            case 4:
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatScreen()),
+              );
+              break;
+            default:
+              break;
           }
         },
         items: const [
