@@ -4,6 +4,7 @@ import 'hospital_map_screen.dart'; // Import the HospitalMapScreen
 import 'eye_test_screen.dart'; // Import the EyeTestScreen
 import 'pharmacy_map_screen.dart'; // Import the PharmacyMapScreen
 import 'health_education_screen.dart'; // Import the HealthEducationScreen
+import 'health_events_screen.dart'; // Import the HealthEventsScreen
 
 class ResourcesScreen extends StatelessWidget {
   const ResourcesScreen({super.key});
@@ -102,6 +103,23 @@ class ResourcesScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => HealthEducationScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Health Events card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.event, color: Colors.green[700]),
+                title: const Text('Local Health Events'),
+                subtitle: const Text('Stay updated on upcoming health events.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HealthEventsScreen()),
                   );
                 },
               ),
