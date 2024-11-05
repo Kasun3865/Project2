@@ -96,27 +96,56 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
   Future<void> _deleteContact(int index) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      try {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .collection('contacts')
-            .doc(_contactIds[index])
-            .delete();
+      // Show confirmation dialog
+      bool? confirmDelete = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirm Delete'),
+            content:
+                const Text('Are you sure you want to delete this contact?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); // Cancel
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true); // Confirm delete
+                },
+                child: const Text('Delete'),
+              ),
+            ],
+          );
+        },
+      );
 
-        setState(() {
-          _contacts.removeAt(index);
-          _contactIds.removeAt(index);
-        });
+      // If the user confirmed deletion, proceed to delete the contact
+      if (confirmDelete == true) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .collection('contacts')
+              .doc(_contactIds[index])
+              .delete();
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Contact deleted successfully')),
-        );
-      } catch (e) {
-        print('Failed to delete contact: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to delete contact')),
-        );
+          setState(() {
+            _contacts.removeAt(index);
+            _contactIds.removeAt(index);
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Contact deleted successfully')),
+          );
+        } catch (e) {
+          print('Failed to delete contact: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to delete contact')),
+          );
+        }
       }
     }
   }

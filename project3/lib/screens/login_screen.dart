@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
+  bool _isPasswordVisible = false; // State variable for password visibility
 
   void _tryLogin() async {
     if (_formKey.currentState!.validate()) {
@@ -33,13 +34,17 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } catch (e) {
         String errorMessage;
-        if (e.code == 'user-not-found') {
-          errorMessage = 'No user found for that email.';
-        } else if (e.code == 'wrong-password') {
-          errorMessage = 'Incorrect password provided.';
+        if (e is FirebaseAuthException) {
+          if (e.code == 'user-not-found') {
+            errorMessage = 'No user found for that email.';
+          } else if (e.code == 'wrong-password') {
+            errorMessage = 'Incorrect password provided.';
+          } else {
+            errorMessage =
+                'Login failed. Please check your details and try again.';
+          }
         } else {
-          errorMessage =
-              'Login failed. Please check your details and try again.';
+          errorMessage = 'An unknown error occurred.';
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
@@ -71,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value!.isEmpty) {
                       return 'Please enter your email';
                     }
-                    // Check if the email format is valid
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
                       return 'Please enter a valid email';
@@ -84,8 +88,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: !_isPasswordVisible,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your password';
@@ -156,8 +175,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-}
-
-extension on Object {
-  get code => null;
 }

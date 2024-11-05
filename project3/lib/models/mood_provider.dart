@@ -91,5 +91,3 @@ class MoodProvider with ChangeNotifier {
     }
   }
 }
-
-extension on Mood {}

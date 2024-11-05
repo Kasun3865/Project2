@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'edit_account_screen.dart'; // Import the edit account screen
+import 'logout_screen.dart'; // Import the logout screen
 
 class MyAccountScreen extends StatefulWidget {
   const MyAccountScreen({super.key});
@@ -30,7 +31,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
 
         if (doc.exists && doc.data() != null) {
           setState(() {
-            userData = doc.data() as Map<String, dynamic>?;
+            userData = doc.data() as Map<String, dynamic>?; // Fetch user data
           });
         } else {
           setState(() {
@@ -48,6 +49,33 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             content:
                 Text('Failed to fetch user data. Please try again later.')),
       );
+    }
+  }
+
+  Future<void> _confirmDeleteAccount() async {
+    // Show a confirmation dialog
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: const Text(
+            'Are you sure you want to delete your account? This action cannot be undone.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false), // Cancel
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true), // Confirm delete
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    // Proceed with account deletion if confirmed
+    if (shouldDelete == true) {
+      await _deleteAccount();
     }
   }
 
@@ -177,11 +205,32 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton.icon(
-                          onPressed: _deleteAccount,
+                          onPressed:
+                              _confirmDeleteAccount, // Updated to use the confirmation dialog
                           icon: const Icon(Icons.delete, color: Colors.white),
                           label: const Text('Delete Account'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red[700],
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 60, vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LogoutScreen()),
+                            );
+                          },
+                          icon: const Icon(Icons.logout, color: Colors.white),
+                          label: const Text('Log Out'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[700],
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 60, vertical: 15),
                             shape: RoundedRectangleBorder(
