@@ -1,6 +1,5 @@
 // health_events_screen.dart
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'health_event.dart'; // Import the HealthEvent class
 
 class HealthEventsScreen extends StatelessWidget {
@@ -26,6 +25,16 @@ class HealthEventsScreen extends StatelessWidget {
     // Add more events as needed
   ];
 
+  // List of colors for the event cards
+  final List<Color> cardColors = [
+    Colors.teal[100]!,
+    Colors.blue[100]!,
+    Colors.pink[100]!,
+    Colors.amber[100]!,
+    Colors.green[100]!,
+    // Add more colors if you have more events
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,17 +47,20 @@ class HealthEventsScreen extends StatelessWidget {
         child: ListView.builder(
           itemCount: events.length,
           itemBuilder: (context, index) {
-            return _buildEventCard(events[index]);
+            return _buildEventCard(events[index], index);
           },
         ),
       ),
     );
   }
 
-  Widget _buildEventCard(HealthEvent event) {
+  Widget _buildEventCard(HealthEvent event, int index) {
+    // Get the color for the current index
+    Color cardColor = cardColors[index % cardColors.length];
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      color: Colors.teal[50],
+      color: cardColor,
       elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16.0),

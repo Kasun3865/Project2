@@ -5,6 +5,10 @@ import 'eye_test_screen.dart'; // Import the EyeTestScreen
 import 'pharmacy_map_screen.dart'; // Import the PharmacyMapScreen
 import 'health_education_screen.dart'; // Import the HealthEducationScreen
 import 'health_events_screen.dart'; // Import the HealthEventsScreen
+import 'health_tracker_screen.dart'; // Import the HealthTrackerScreen
+import 'symptom_checker_screen.dart'; // Import the SymptomCheckerScreen
+import 'bmi_calculator_screen.dart'; // Import the BMICalculatorScreen
+import 'health_news_screen.dart'; // Import the HealthNewsScreen
 
 class ResourcesScreen extends StatelessWidget {
   const ResourcesScreen({super.key});
@@ -120,6 +124,74 @@ class ResourcesScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => HealthEventsScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Health Tracker card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.track_changes, color: Colors.green[700]),
+                title: const Text('Health Tracker'),
+                subtitle: const Text('Track your health metrics over time.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HealthTrackerScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Symptom Checker card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.local_hospital, color: Colors.green[700]),
+                title: const Text('Symptom Checker'),
+                subtitle: const Text('Check your symptoms and get advice.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SymptomCheckerScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // BMI Calculator card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.calculate, color: Colors.green[700]),
+                title: const Text('BMI Calculator'),
+                subtitle: const Text('Calculate your Body Mass Index.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BMICalculatorScreen()),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Health News card
+            Card(
+              color: Colors.green[50],
+              child: ListTile(
+                leading: Icon(Icons.article, color: Colors.green[700]),
+                title: const Text('Health News'),
+                subtitle:
+                    const Text('Stay updated with the latest health news.'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HealthNewsScreen()),
                   );
                 },
               ),
