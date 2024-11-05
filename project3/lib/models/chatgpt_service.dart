@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ChatGPTService {
   final String _apiKey =
-      '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';
+      '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';
   final String _url = 'https://api.openai.com/v1/chat/completions';
 
   Future<String> sendMessage(String message) async {

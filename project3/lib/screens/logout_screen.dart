@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart'; // Import this package
+import 'login_screen.dart'; // Import the LoginScreen
 
 class LogoutScreen extends StatelessWidget {
   const LogoutScreen({Key? key}) : super(key: key);
@@ -8,8 +8,13 @@ class LogoutScreen extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      // Close the app completely
-      SystemNavigator.pop();
+
+      // Navigate back to the LoginScreen and clear the navigation stack
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false, // Remove all routes from the stack
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to log out.')),
